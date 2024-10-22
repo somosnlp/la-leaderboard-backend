@@ -8,6 +8,7 @@ from src.backend.run_eval_suite_harness import run_evaluation
 from src.backend.sort_queue import sort_models_by_priority
 from src.envs import (
     API,
+    BATCH_SIZE,
     DEVICE,
     EVAL_REQUESTS_PATH_BACKEND,
     EVAL_RESULTS_PATH_BACKEND,
@@ -97,7 +98,7 @@ def run_auto_eval():
         local_dir=EVAL_RESULTS_PATH_BACKEND,
         results_repo=RESULTS_REPO,
         logs_repo=LOGS_REPO,
-        batch_size=1,
+        batch_size=BATCH_SIZE,
         device=DEVICE,
         leaderboard_group=LEADERBOARD_GROUP,
         limit=LIMIT,

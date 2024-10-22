@@ -17,6 +17,7 @@ LIMIT = None  # TODO: Should be None for actual evaluations
 NUM_FEWSHOT = 5  # TODO: Remove to use each task's default number of few-shots
 LEADERBOARD_GROUP = None  # TODO: Update leaderboard group name
 PARALLELIZE = True
+BATCH_SIZE = 1
 
 # Cache setup
 CACHE_PATH = os.getenv("HF_HOME", ".")  # /data/.huggingface
