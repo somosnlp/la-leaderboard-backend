@@ -9,9 +9,9 @@ import datasets
 import numpy as np
 from lm_eval import evaluator, tasks, utils
 
-from src.backend.manage_requests import EvalRequest
-from src.envs import API, HARDWARE, TASKS_HARNESS
-from src.logging import log_file, setup_logger
+from basic_queue.backend.manage_requests import EvalRequest
+from basic_queue.envs import API, HARDWARE, TASKS_HARNESS
+from basic_queue.logging import log_file, setup_logger
 
 logging.getLogger("openai").setLevel(logging.WARNING)
 logger = setup_logger(__name__)

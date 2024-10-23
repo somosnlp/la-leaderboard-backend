@@ -1,8 +1,8 @@
 import json
 
-from src.backend.manage_requests import EvalRequest
-from src.backend.run_eval_suite_harness import run_evaluation
-from src.envs import (
+from basic_queue.backend.manage_requests import EvalRequest
+from basic_queue.backend.run_eval_suite_harness import run_evaluation
+from basic_queue.envs import (
     BATCH_SIZE,
     DEVICE,
     EVAL_RESULTS_PATH_BACKEND,

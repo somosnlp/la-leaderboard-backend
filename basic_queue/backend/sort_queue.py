@@ -1,18 +1,8 @@
-from dataclasses import dataclass
-
-from huggingface_hub import HfApi
-
-from src.backend.manage_requests import EvalRequest
-
-
-@dataclass
-class ModelMetadata:
-    likes: int = 0
-    size: int = 15
+from basic_queue.backend.manage_requests import EvalRequest
 
 
 # All the functions below sort the models in the queue based on different parameters
-def sort_models_by_priority(api: HfApi, models: list[EvalRequest]) -> list[EvalRequest]:
+def sort_models_by_priority(models: list[EvalRequest]) -> list[EvalRequest]:
     private_models = [model for model in models if model.private]
     public_models = [model for model in models if not model.private]
 

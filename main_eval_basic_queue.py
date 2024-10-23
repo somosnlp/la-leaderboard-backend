@@ -3,10 +3,10 @@ import pprint
 
 from huggingface_hub import snapshot_download
 
-from src.backend.manage_requests import check_completed_evals, get_eval_requests, set_eval_request
-from src.backend.run_eval_suite_harness import run_evaluation
-from src.backend.sort_queue import sort_models_by_priority
-from src.envs import (
+from basic_queue.backend.manage_requests import check_completed_evals, get_eval_requests, set_eval_request
+from basic_queue.backend.run_eval_suite_harness import run_evaluation
+from basic_queue.backend.sort_queue import sort_models_by_priority
+from basic_queue.envs import (
     API,
     BATCH_SIZE,
     DEVICE,
@@ -21,7 +21,7 @@ from src.envs import (
     TASKS_HARNESS,
     TOKEN,
 )
-from src.logging import setup_logger
+from basic_queue.logging import setup_logger
 
 logging.getLogger("openai").setLevel(logging.WARNING)
 

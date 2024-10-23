@@ -5,8 +5,8 @@ from typing import Optional
 
 from huggingface_hub import HfApi, snapshot_download
 
-from src.envs import PARALLELIZE, TOKEN
-from src.logging import setup_logger
+from basic_queue.envs import PARALLELIZE, TOKEN
+from basic_queue.logging import setup_logger
 
 logger = setup_logger(__name__)
 
@@ -29,9 +29,9 @@ class EvalRequest:
     license: Optional[str] = ""
     private: bool = False
     sender: str = ""
-    submitted_time: Optional[
-        str
-    ] = "2022-05-18T11:40:22.519222"  # random date just so that we can still order requests by date
+    submitted_time: Optional[str] = (
+        "2022-05-18T11:40:22.519222"  # random date just so that we can still order requests by date
+    )
 
     # TODO: remove trust_remote_code
     def get_model_args(self):
