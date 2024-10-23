@@ -1,9 +1,9 @@
 """
-This files uses the request parameters to construct the correct slurm command. 
+This file uses the request parameters to construct the correct slurm command. 
 
 This assumes that you are running on nodes with 8GPUs of 80G mem - if that is not the case, you'll need to adapt the model/data parallelism. It might also need to be adapted for the harness, as we built an API over their model launchers to launch evaluations more efficiently.
 
-TODO: The`slurm_script_path` should be the path to a slurm script adapted to your cluster (defining your env vars etc), which takes the launch command as positional arg, and launches it.
+
 """
 
 import datetime

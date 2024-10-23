@@ -73,7 +73,7 @@ def run_auto_eval():
         job_status=current_pending_status, hf_repo=QUEUE_REPO, local_dir=EVAL_REQUESTS_PATH_BACKEND
     )
     # Sort the evals by priority (first submitted first run)
-    eval_requests = sort_models_by_priority(api=API, models=eval_requests)
+    eval_requests = sort_models_by_priority(models=eval_requests)
 
     print(f"Found {len(eval_requests)} {','.join(current_pending_status)} eval requests")
 

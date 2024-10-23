@@ -1,3 +1,7 @@
+"""
+TODO: The`slurm_script_path` should be the path to a slurm script adapted to your cluster (defining your env vars etc), which takes the launch command as positional arg, and launches it.
+"""
+
 import datetime
 import logging
 import os
@@ -13,10 +17,10 @@ logging.basicConfig(level=logging.ERROR)
 pp = pprint.PrettyPrinter(width=80)
 
 # Where to pull and send requests from
-REQUESTS_REPO = "open-llm-leaderboard/requests"
+REQUESTS_REPO = "la-leaderboard/requests"
 
 # The tasks you want to launch
-TASKS_FILE_2023A = "src/defaults/tasks_2023a.txt"
+TASKS_FILE_2023A = "src/defaults/tasks_2023a.txt"  # TODO: Use our tasks
 
 PENDING_STATUS = "PENDING"
 RUNNING_STATUS = "RUNNING"
@@ -25,7 +29,7 @@ FAILED_STATUS = "FAILED"
 
 
 USER = "lighteval"
-SLURM_SCRIPT_8GPU = f"llm-leaderboard-backend/slurm_files/auto_eval_8gpu.slurm"
+SLURM_SCRIPT_8GPU = f"la-leaderboard-backend/slurm_files/auto_eval_8gpu.slurm"
 LOCAL_DIR = f"eval_queue"
 
 NUMBER_OF_JOBS_ON_WEEKDAYS = 40
@@ -33,7 +37,7 @@ NUMBER_OF_JOBS_ON_WEEKENDS = 40
 
 # We download the results and requests files
 snapshot_download(
-    repo_id="open-llm-leaderboard/results", revision="main", local_dir="results", repo_type="dataset", max_workers=60
+    repo_id="la-leaderboard/results", revision="main", local_dir="results", repo_type="dataset", max_workers=60
 )
 snapshot_download(repo_id=REQUESTS_REPO, revision="main", local_dir=LOCAL_DIR, repo_type="dataset", max_workers=60)
 
