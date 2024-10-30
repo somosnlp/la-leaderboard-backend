@@ -29,7 +29,7 @@ FAILED_STATUS = "FAILED"
 
 
 USER = "lighteval"
-SLURM_SCRIPT_8GPU = f"la-leaderboard-backend/slurm_files/auto_eval_8gpu.slurm"
+SLURM_SCRIPT_8GPU = f"la-leaderboard-backend/slurm_queue/auto_eval_8gpu.slurm"
 LOCAL_DIR = f"eval_queue"
 
 NUMBER_OF_JOBS_ON_WEEKDAYS = 40
