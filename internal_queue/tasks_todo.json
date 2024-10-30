@@ -4,80 +4,74 @@
         "catcola",
         "parafraseja",
         "paws_ca",
-        "xnli_ca"
+        "xnli_ca",
+        "wnli_eu"
     ],
     "HiTZ/latxa-7b-v1.2": [],
-    "proxectonos/Carballo-bloom-1.3B": [
-        "mgsm_direct_es",
-        "mgsm_direct_ca",
-        "mgsm_direct_gl"
-    ],
+    "proxectonos/Carballo-bloom-1.3B": [],
     "projecte-aina/aguila-7b": [
         "escola",
-        "mgsm_direct_gl"
+        "wnli_eu"
     ],
     "projecte-aina/FLOR-6.3B": [],
     "gplsi/Aitana-6.3B": [
         "escola",
         "catcola",
         "paws_ca",
-        "xnli_ca"
+        "xnli_ca",
+        "wnli_eu"
     ],
-    "occiglot/occiglot-7b-es-en": [
-        "eus_reading",
-        "summarization_gl"
-    ],
+    "occiglot/occiglot-7b-es-en": [],
     "bertin-project/bertin-gpt-j-6B": [
         "escola",
-        "mgsm_direct_es",
         "catcola",
-        "mgsm_direct_ca",
         "paws_ca",
         "xnli_ca",
-        "mgsm_direct_gl"
+        "wnli_eu"
     ],
     "meta-llama/Meta-Llama-3.1-8B": [],
     "mistralai/Mistral-7B-v0.3": [],
     "01-ai/Yi-1.5-9B": [
         "escola",
-        "mgsm_direct_es",
         "catcola",
         "paws_ca",
-        "xnli_ca"
+        "xnli_ca",
+        "wnli_eu"
     ],
     "microsoft/phi-1_5": [
         "escola",
         "catcola",
-        "mgsm_direct_ca",
         "paws_ca",
         "xnli_ca",
-        "mgsm_direct_gl"
+        "wnli_eu"
     ],
     "tiiuae/falcon-7b": [
         "escola",
         "catcola",
         "paws_ca",
-        "xnli_ca"
+        "xnli_ca",
+        "wnli_eu"
     ],
     "bertin-project/Gromenauer-7B": [
         "escola",
-        "mgsm_direct_es",
         "catcola",
         "paws_ca",
-        "xnli_ca"
+        "xnli_ca",
+        "wnli_eu"
     ],
     "BSC-LT/salamandra-2b": [
         "escola",
-        "mgsm_direct_es",
         "catcola",
         "paws_ca",
-        "xnli_ca"
+        "xnli_ca",
+        "wnli_eu"
     ],
     "BSC-LT/salamandra-7b": [
         "escola",
         "catcola",
         "paws_ca",
-        "xnli_ca"
+        "xnli_ca",
+        "wnli_eu"
     ],
     "meta-llama/Llama-3.2-1B": [
         "escola",
@@ -85,7 +79,8 @@
         "catcola",
         "paws_ca",
         "wnli_ca",
-        "xnli_ca"
+        "xnli_ca",
+        "wnli_eu"
     ],
     "meta-llama/Llama-3.2-3B": [
         "escola",
@@ -93,6 +88,7 @@
         "catcola",
         "paws_ca",
         "wnli_ca",
-        "xnli_ca"
+        "xnli_ca",
+        "wnli_eu"
     ]
 }
