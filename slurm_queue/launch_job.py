@@ -12,7 +12,14 @@ from transformers import AutoConfig
 
 from .eval_requests import EvalRequest
 
+EVAL_SCRIPT_FILE = ""  # TODO: path to the lm_eval main or lighteval main/main.py
+ACCELERATE_CONFIG_FILE = (
+    ""  # TODO: path to the accelerate config file/default_config.yaml - Create file running `accelerate config iirc`
+)
 OUTPUT_PATH = "eval_results"
+LOG_SAMPLES = True
+WRITE_OUT = True
+PUSH_TO_HUB = True
 
 models_that_need_trust = []
 
@@ -21,18 +28,19 @@ models_that_need_trust = []
 @dataclass
 class EvalJob:
     eval_script_file: str
+    accelerate_config_file: str
     hub_model: str
     revision: str
     trust_remote_code: bool
     precision: str
     model_size_in_b: float
-    tasks: str
-    output_dir: str
-    push_to_hub: bool
-    save_queries: bool
-    accelerate_config_file: str
     weight_type: str
     base_model: str
+    tasks: str
+    output_path: str
+    push_to_hub: bool
+    log_samples: bool
+    write_out: bool
 
     def build_command(self) -> str:
         """
@@ -98,15 +106,19 @@ class EvalJob:
             f"accelerate launch {accelerate_args} "
             f"{self.eval_script_file} "
             f"--model_args {model_args} "
+            f"{weight_type_arg} "
+            f"{base_model} "
             f"--tasks {self.tasks} "
             f"--override_batch_size 1 "  # the above values are only sure to work with bs=1
-            f"--output_dir {self.output_dir} "
-            f"{'--push_results_to_hub' if self.push_to_hub else ''} "
-            f"{'--push_details_to_hub' if self.push_to_hub else ''} "
-            f"{'--save_details' if self.save_queries else ''} "
-            f"{'--public_run' if self.push_to_hub and self.save_queries else ''} "
-            f"{weight_type_arg} "
-            f"{base_model}"
+            f"--output_path {self.output_path} "
+            f"{'--log_samples' if self.log_samples else ''} "
+            f"{'--write_out' if self.write_out else ''} "
+            f"--hf_hub_log_args "
+            f"hub_results_org=la-leaderboard,"
+            f"details_repo_name=details,"
+            f"results_repo_name=results,"
+            f"push_results_to_hub={self.push_to_hub},"
+            f"push_samples_to_hub={self.push_to_hub} "
         )
 
 
@@ -121,19 +133,20 @@ def launch_job(eval_request: EvalRequest, slurm_script_path: str, tasks_file: st
     trust_remote_code = hub_model in models_that_need_trust
 
     eval_job_request = EvalJob(
-        eval_script_file=f"/math to the lm_eval main or lighteval main/main.py",
+        eval_script_file=EVAL_SCRIPT_FILE,
+        accelerate_config_file=ACCELERATE_CONFIG_FILE,
         hub_model=hub_model,
         revision=revision,
         trust_remote_code=trust_remote_code,
         precision=eval_request.precision,
         model_size_in_b=eval_request.params,
-        tasks=tasks_file,
-        output_dir=OUTPUT_PATH,
-        push_to_hub=True,
-        save_queries=True,
-        accelerate_config_file=f"path to your accelerate config file/default_config.yaml",  # TODO: Create file running `accelerate config iirc`
         weight_type=eval_request.weight_type,
         base_model=eval_request.base_model,
+        tasks=tasks_file,
+        output_path=OUTPUT_PATH,
+        log_samples=LOG_SAMPLES,
+        write_out=WRITE_OUT,
+        push_to_hub=PUSH_TO_HUB,
     )
 
     try:
