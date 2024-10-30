@@ -2,8 +2,6 @@
 This file uses the request parameters to construct the correct slurm command. 
 
 This assumes that you are running on nodes with 8GPUs of 80G mem - if that is not the case, you'll need to adapt the model/data parallelism. It might also need to be adapted for the harness, as we built an API over their model launchers to launch evaluations more efficiently.
-
-
 """
 
 import datetime
@@ -112,9 +110,7 @@ class EvalJob:
         )
 
 
-def launch_job(
-    eval_request: EvalRequest, slurm_script_path: str, tasks_file: str, user: str = "lighteval"
-) -> EvalRequest:
+def launch_job(eval_request: EvalRequest, slurm_script_path: str, tasks_file: str) -> EvalRequest:
     """
     From a request, tests that the linked model exists, applies the delta/adapter weights if needed,
     then builds the correct command and launches the slurm job associated.
