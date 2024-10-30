@@ -134,6 +134,7 @@ def evaluate_tasks(eval_request, task_names, num_fewshot, batch_size, device, li
             )
             results["results"][task] = task_result["results"][task]
             logger.info(f"Results for task {task}: {json.dumps(task_result['results'][task], indent=2)}")
+            logger.info(f"Samples:\n{task_result['samples'][task]}")
         except Exception as e:
             logger.error(f"An error occurred during evaluation of task {task}: {e}")
             continue
@@ -191,6 +192,7 @@ def evaluate_leaderboard(eval_request, leaderboard_group, task_names, num_fewsho
             try:
                 results["results"][task] = task_result["results"][task]
                 logger.info(f"Results for task {task}: {json.dumps(task_result['results'][task], indent=2)}")
+                logger.info(f"Samples:\n{task_result['samples'][task]}")
             except Exception as e:
                 logger.error(f"An error occurred during evaluation of task {task}: {e}")
                 continue
