@@ -135,7 +135,7 @@ def launch_job(
         output_dir=OUTPUT_PATH,
         push_to_hub=True,
         save_queries=True,
-        accelerate_config_file=f"path to your accelerate config file/default_config.yaml",
+        accelerate_config_file=f"path to your accelerate config file/default_config.yaml",  # TODO: Create file running `accelerate config iirc`
         weight_type=eval_request.weight_type,
         base_model=eval_request.base_model,
     )
