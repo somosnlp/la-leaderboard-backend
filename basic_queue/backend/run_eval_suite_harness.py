@@ -57,7 +57,7 @@ def run_evaluation(
         task_names = get_task_names(task_names=task_names)
 
         if leaderboard_group:
-            results, elapsed_time = evaluate_leaderboard(
+            results, samples, elapsed_time = evaluate_leaderboard(
                 eval_request=eval_request,
                 leaderboard_group=leaderboard_group,
                 task_names=task_names,
@@ -67,7 +67,7 @@ def run_evaluation(
                 limit=limit,
             )
         else:
-            results, elapsed_time = evaluate_tasks(
+            results, samples, elapsed_time = evaluate_tasks(
                 eval_request=eval_request,
                 task_names=task_names,
                 num_fewshot=num_fewshot,
@@ -78,10 +78,18 @@ def run_evaluation(
 
         log_evaluation_results(results, elapsed_time)
 
-        output_path = save_results_locally(results=results, eval_request=eval_request, local_dir=local_dir)
+        results_path, samples_path = save_results_locally(
+            results=results, samples=samples, eval_request=eval_request, local_dir=local_dir
+        )
 
-        upload_results(output_path=output_path, eval_request=eval_request, results_repo=results_repo)
-        upload_logs(output_path=output_path, eval_request=eval_request, log_file_path=log_file, logs_repo=logs_repo)
+        upload_results(results_path=results_path, eval_request=eval_request, results_repo=results_repo)
+        upload_logs(
+            results_path=results_path,
+            samples_path=samples_path,
+            eval_request=eval_request,
+            log_file_path=log_file,
+            logs_repo=logs_repo,
+        )
 
         return results
 
@@ -105,7 +113,6 @@ def evaluate_tasks(eval_request, task_names, num_fewshot, batch_size, device, li
     start_time = time.time()
 
     results = {
-        "results": {},
         "config": {
             "model_dtype": eval_request.precision,
             "model_name": eval_request.model,
@@ -115,6 +122,20 @@ def evaluate_tasks(eval_request, task_names, num_fewshot, batch_size, device, li
             "batch_size": batch_size,
             "limit": limit,
         },
+        "results": {},
+    }
+
+    samples = {
+        "config": {
+            "model_dtype": eval_request.precision,
+            "model_name": eval_request.model,
+            "model_sha": eval_request.revision,
+            "task_names": task_names,
+            "num_fewshot": num_fewshot,
+            "batch_size": batch_size,
+            "limit": limit,
+        },
+        "samples": {},
     }
 
     for task in task_names:
@@ -133,8 +154,11 @@ def evaluate_tasks(eval_request, task_names, num_fewshot, batch_size, device, li
                 verbosity="DEBUG",
             )
             results["results"][task] = task_result["results"][task]
-            logger.info(f"Results for task {task}: {json.dumps(task_result['results'][task], indent=2)}")
-            logger.info(f"Samples:\n{task_result['samples'][task]}")
+            samples["samples"][task] = task_result["samples"][task]
+
+            logger.info(f"Results for task {task}:\n{json.dumps(task_result['results'][task], indent=2)}")
+            logger.info(f"Samples:\n{json.dumps(task_result['samples'][task], indent=2, ensure_ascii=False)}")
+
         except Exception as e:
             logger.error(f"An error occurred during evaluation of task {task}: {e}")
             continue
@@ -144,7 +168,7 @@ def evaluate_tasks(eval_request, task_names, num_fewshot, batch_size, device, li
 
     results["results"]["time"] = elapsed_time
 
-    return results, elapsed_time
+    return results, samples, elapsed_time
 
 
 def evaluate_leaderboard(eval_request, leaderboard_group, task_names, num_fewshot, batch_size, device, limit):
@@ -153,16 +177,29 @@ def evaluate_leaderboard(eval_request, leaderboard_group, task_names, num_fewsho
     start_time = time.time()
 
     results = {
-        "results": {},
         "config": {
             "model_dtype": eval_request.precision,
             "model_name": eval_request.model,
             "model_sha": eval_request.revision,
-            "task_names": leaderboard_group,
+            "task_names": task_names,
             "num_fewshot": num_fewshot,
             "batch_size": batch_size,
             "limit": limit,
         },
+        "results": {},
+    }
+
+    samples = {
+        "config": {
+            "model_dtype": eval_request.precision,
+            "model_name": eval_request.model,
+            "model_sha": eval_request.revision,
+            "task_names": task_names,
+            "num_fewshot": num_fewshot,
+            "batch_size": batch_size,
+            "limit": limit,
+        },
+        "samples": {},
     }
 
     logger.info(f"Evaluating leaderboard group {leaderboard_group}")
@@ -191,11 +228,15 @@ def evaluate_leaderboard(eval_request, leaderboard_group, task_names, num_fewsho
         for task in task_names:
             try:
                 results["results"][task] = task_result["results"][task]
-                logger.info(f"Results for task {task}: {json.dumps(task_result['results'][task], indent=2)}")
-                logger.info(f"Samples:\n{task_result['samples'][task]}")
+                samples["samples"][task] = task_result["samples"][task]
+
+                logger.info(f"Results for task {task}:\n{json.dumps(task_result['results'][task], indent=2)}")
+                logger.info(f"Samples:\n{json.dumps(task_result['samples'][task], indent=2, ensure_ascii=False)}")
+
             except Exception as e:
                 logger.error(f"An error occurred during evaluation of task {task}: {e}")
                 continue
+
     except Exception as e:
         logger.error(f"An error occurred during evaluation of group {leaderboard_group}: {e}")
 
@@ -204,7 +245,7 @@ def evaluate_leaderboard(eval_request, leaderboard_group, task_names, num_fewsho
 
     results["results"]["time"] = elapsed_time
 
-    return results, elapsed_time
+    return results, samples, elapsed_time
 
 
 def log_evaluation_results(results, elapsed_time):
@@ -236,28 +277,35 @@ class NumpyEncoder(json.JSONEncoder):
         return super(NumpyEncoder, self).default(obj)
 
 
-def save_results_locally(results, eval_request, local_dir):
+def save_results_locally(results, samples, eval_request, local_dir):
     "Save the results locally."
-    dumped = json.dumps(results, indent=2, cls=NumpyEncoder)
-    logger.info(f"Dumped JSON: {dumped}")
-
-    output_path = os.path.join(
+    results_dumped = json.dumps(results, indent=2, cls=NumpyEncoder)
+    logger.info(f"Dumped results JSON: {results_dumped}")
+    results_path = os.path.join(
         local_dir, *eval_request.model.split("/"), f"results_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
     )
-    os.makedirs(os.path.dirname(output_path), exist_ok=True)
-    with open(output_path, "w") as f:
-        f.write(dumped)
+    os.makedirs(os.path.dirname(results_path), exist_ok=True)
+    with open(results_path, "w") as f:
+        f.write(results_dumped)
+
+    samples_dumped = json.dumps(samples, indent=2, ensure_ascii=False, cls=NumpyEncoder)
+    samples_path = os.path.join(
+        local_dir, *eval_request.model.split("/"), f"samples_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+    )
+    os.makedirs(os.path.dirname(samples_path), exist_ok=True)
+    with open(samples_path, "w") as f:
+        f.write(samples_dumped)
 
     # logger.info(f"Results table: {evaluator.make_table(results)}")
-    return output_path
+    return results_path, samples_path
 
 
-def upload_results(output_path, eval_request, results_repo):
+def upload_results(results_path, eval_request, results_repo):
     "Upload the results to the Hugging Face hub."
     try:
-        logger.info(f"Uploading results file {output_path} to repository {results_repo}")
+        logger.info(f"Uploading results file {results_path} to repository {results_repo}")
         API.upload_file(
-            path_or_fileobj=output_path,
+            path_or_fileobj=results_path,
             path_in_repo=f"{eval_request.model}/results_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json",
             repo_id=results_repo,
             repo_type="dataset",
@@ -268,7 +316,7 @@ def upload_results(output_path, eval_request, results_repo):
         raise
 
 
-def upload_logs(output_path, eval_request, log_file_path, logs_repo):
+def upload_logs(results_path, samples_path, eval_request, log_file_path, logs_repo):
     "Upload the logs, results and evaluated tasks to the Hugging Face hub."
 
     datetime_now = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -276,9 +324,9 @@ def upload_logs(output_path, eval_request, log_file_path, logs_repo):
     run_id = f"{datetime_now}_{model_id}"
 
     try:
-        logger.info(f"Uploading results file {output_path} to repository {logs_repo}")
+        logger.info(f"Uploading results file {results_path} to repository {logs_repo}")
         API.upload_file(
-            path_or_fileobj=output_path,
+            path_or_fileobj=results_path,
             path_in_repo=f"{run_id}/{run_id}_results.json",
             repo_id=logs_repo,
             repo_type="dataset",
@@ -286,6 +334,18 @@ def upload_logs(output_path, eval_request, log_file_path, logs_repo):
         logger.info("Results file uploaded successfully.")
     except Exception as e:
         logger.error(f"Failed to upload results file: {e}")
+
+    try:
+        logger.info(f"Uploading samples file {samples_path} to repository {logs_repo}")
+        API.upload_file(
+            path_or_fileobj=samples_path,
+            path_in_repo=f"{run_id}/{run_id}_samples.json",
+            repo_id=logs_repo,
+            repo_type="dataset",
+        )
+        logger.info("Samples file uploaded successfully.")
+    except Exception as e:
+        logger.error(f"Failed to upload samples file: {e}")
 
     try:
         logger.info(f"Uploading logs file {log_file_path} to repository {logs_repo}")
