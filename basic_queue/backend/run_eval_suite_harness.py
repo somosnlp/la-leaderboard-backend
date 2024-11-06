@@ -82,7 +82,9 @@ def run_evaluation(
             results=results, samples=samples, eval_request=eval_request, local_dir=local_dir
         )
 
-        upload_results(results_path=results_path, eval_request=eval_request, results_repo=results_repo)
+        if not limit:  # Results are still uploaded to the logs repo
+            upload_results(results_path=results_path, eval_request=eval_request, results_repo=results_repo)
+
         upload_logs(
             results_path=results_path,
             samples_path=samples_path,
