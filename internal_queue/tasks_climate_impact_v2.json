@@ -1,0 +1,20 @@
+{
+    "BSC-LT/salamandra-7b": [
+        "xnli_en",
+        "xnli_es",
+        "xnli_eu",
+        "xnli_fr"
+    ],
+    "meta-llama/Llama-3.1-8B": [
+        "xnli_en",
+        "xnli_es",
+        "xnli_eu",
+        "xnli_fr"
+    ],
+    "bertin-project/Gromenauer-7B": [
+        "xnli_en",
+        "xnli_es",
+        "xnli_eu",
+        "xnli_fr"
+    ]
+}
