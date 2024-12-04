@@ -1,4 +1,5 @@
 import json
+import sys
 
 from basic_queue.backend.manage_requests import EvalRequest
 from basic_queue.backend.run_eval_suite_harness import run_evaluation
@@ -14,7 +15,13 @@ from basic_queue.envs import (
 )
 
 if __name__ == "__main__":
-    with open("internal_queue/tasks_todo.json", "r") as f:
+
+    if len(sys.argv) > 1:
+        tasks_todo_path = sys.argv[1]
+    else:
+        tasks_todo_path = "internal_queue/tasks_todo.json"
+
+    with open(tasks_todo_path, "r") as f:
         tasks_todo = json.load(f)
     with open("internal_queue/model_precision.json", "r") as f:
         model_precision = json.load(f)
