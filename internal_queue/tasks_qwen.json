@@ -1,0 +1,19 @@
+{
+    "Qwen/Qwen2.5-32B-Instruct": [
+        "aquas",
+        "noticia",
+        "ragquas",
+        "teleia",
+        "belebele_spa_Latn",
+        "escola",
+        "mgsm_direct_es_spanish_bench",
+        "paws_es_spanish_bench",
+        "xnli_es",
+        "xquad_es",
+        "xstorycloze_es",
+        "crows_pairs_spanish",
+        "fake_news_es",
+        "offendes",
+        "xnli_es_spanish_bench"
+    ]
+}
