@@ -25,6 +25,9 @@ dependencies = [
     "lm-eval @ git+https://github.com/somosnlp/lm-evaluation-harness.git@specify_num_fewshots_per_task#egg=lm_eval"
 ]
 
+[tool.setuptools]
+packages = ["basic_queue", "internal_queue", "slurm_queue"]
+
 [tool.black]
 line-length = 119
 

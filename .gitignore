@@ -5,6 +5,7 @@ __pycache__/
 .ipynb_checkpoints
 .vscode/
 .idea/
+la_leaderboard_backend.egg-info/
 
 eval-queue/
 eval-results/
