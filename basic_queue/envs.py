@@ -2,7 +2,7 @@ import os
 
 from huggingface_hub import HfApi, login
 
-TOKEN = os.environ.get("TOKEN")  # A read/write token for your org
+TOKEN = os.environ.get("HF_TOKEN")  # A read/write token for your org
 
 # Leaderboard ecosystem
 OWNER = "la-leaderboard"

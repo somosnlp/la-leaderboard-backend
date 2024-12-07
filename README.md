@@ -6,4 +6,5 @@
 
 Notes:
 
+- Set the HF_TOKEN environment variable to your Hugging Face token
 - Check the version of the lm-evaluation-harness used in the requirements
