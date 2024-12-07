@@ -17,9 +17,6 @@ ACCELERATE_CONFIG_FILE = (
     ""  # TODO: path to the accelerate config file/default_config.yaml - Create file running `accelerate config iirc`
 )
 OUTPUT_PATH = "eval_results"
-LOG_SAMPLES = True
-WRITE_OUT = True
-PUSH_TO_HUB = True
 
 models_that_need_trust = []
 
@@ -28,7 +25,7 @@ models_that_need_trust = []
 @dataclass
 class EvalJob:
     eval_script_file: str
-    accelerate_config_file: str
+    accelerate_config_file: str  # Currently, accelerate args used instead
     hub_model: str
     revision: str
     trust_remote_code: bool
@@ -38,9 +35,6 @@ class EvalJob:
     base_model: str
     tasks: str
     output_path: str
-    push_to_hub: bool
-    log_samples: bool
-    write_out: bool
 
     def build_command(self) -> str:
         """
@@ -111,14 +105,15 @@ class EvalJob:
             f"--tasks {self.tasks} "
             f"--override_batch_size 1 "  # the above values are only sure to work with bs=1
             f"--output_path {self.output_path} "
-            f"{'--log_samples' if self.log_samples else ''} "
-            f"{'--write_out' if self.write_out else ''} "
+            f"--log_samples "
+            f"--write_out "
+            f"--show_config "
             f"--hf_hub_log_args "
             f"hub_results_org=la-leaderboard,"
             f"details_repo_name=details,"
             f"results_repo_name=results,"
-            f"push_results_to_hub={self.push_to_hub},"
-            f"push_samples_to_hub={self.push_to_hub} "
+            f"push_results_to_hub=True,"
+            f"push_samples_to_hub=True "
         )
 
 
@@ -144,9 +139,6 @@ def launch_job(eval_request: EvalRequest, slurm_script_path: str, tasks_file: st
         base_model=eval_request.base_model,
         tasks=tasks_file,
         output_path=OUTPUT_PATH,
-        log_samples=LOG_SAMPLES,
-        write_out=WRITE_OUT,
-        push_to_hub=PUSH_TO_HUB,
     )
 
     try:
