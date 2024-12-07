@@ -10,13 +10,14 @@ from dataclasses import dataclass
 
 from transformers import AutoConfig
 
-from .eval_requests import EvalRequest
+from slurm_queue.eval_requests import EvalRequest
 
-EVAL_SCRIPT_FILE = ""  # TODO: path to the lm_eval main or lighteval main/main.py
+EVAL_SCRIPT_FILE = "-m lm_eval"  # TODO: path to the lm_eval main or lighteval main/main.py
 ACCELERATE_CONFIG_FILE = (
     ""  # TODO: path to the accelerate config file/default_config.yaml - Create file running `accelerate config iirc`
 )
 OUTPUT_PATH = "eval_results"
+LIMIT = None  # Must be None for actual evaluations!
 
 models_that_need_trust = []
 
@@ -35,6 +36,7 @@ class EvalJob:
     base_model: str
     tasks: str
     output_path: str
+    limit: int | None
 
     def build_command(self) -> str:
         """
@@ -47,7 +49,7 @@ class EvalJob:
         ## --config_file {self.accelerate_config_file}
         accelerate_args = "--multi_gpu "
 
-        if self.precision in ["float16", "bfloat16"]:
+        if self.precision in ["float32", "float16", "bfloat16"]:
             precision_factor = 1
             model_args += f",dtype={self.precision}"
         elif self.precision == "8bit":
@@ -103,7 +105,7 @@ class EvalJob:
             f"{weight_type_arg} "
             f"{base_model} "
             f"--tasks {self.tasks} "
-            f"--override_batch_size 1 "  # the above values are only sure to work with bs=1
+            f"--batch_size 1 "  # the above values are only sure to work with bs=1
             f"--output_path {self.output_path} "
             f"--log_samples "
             f"--write_out "
@@ -113,7 +115,9 @@ class EvalJob:
             f"details_repo_name=details,"
             f"results_repo_name=results,"
             f"push_results_to_hub=True,"
-            f"push_samples_to_hub=True "
+            f"push_samples_to_hub=True,"
+            f"public_repo=False "
+            f"{f'--limit {self.limit} ' if self.limit else ''} "
         )
 
 
