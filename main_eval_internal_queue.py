@@ -36,6 +36,7 @@ if __name__ == "__main__":
             base_model="",  # TODO: Review arg
             status="",  # TODO: Review arg
             json_filepath="",  # TODO: Review arg
+            private=False,
         )
 
         run_evaluation(
