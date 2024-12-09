@@ -1,8 +1,8 @@
 {
-    "Qwen/Qwen2.5-32B-Instruct": "bfloat16",
     "Iker/Llama-3-Instruct-Neurona-8b-v2": "bfloat16",
-    "utter-project/EuroLLM-1.7B-Instruct": "bfloat16",
-    "microsoft/Phi-3.5-mini-instruct": "float32",
-    "ibm-granite/granite-3.0-8b-instruct": "float32",
     "LenguajeNaturalAI/leniachat-qwen2-1.5B-v0": "float32",
+    "Qwen/Qwen2.5-32B-Instruct": "bfloat16",
+    "ibm-granite/granite-3.0-8b-instruct": "float32",
+    "microsoft/Phi-3.5-mini-instruct": "bfloat16",
+    "utter-project/EuroLLM-1.7B-Instruct": "bfloat16"
 }
