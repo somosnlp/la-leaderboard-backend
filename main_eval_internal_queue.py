@@ -28,6 +28,10 @@ if __name__ == "__main__":
 
     for model in tasks_todo:
         MODEL = model
+
+        if model == "flax-community/gpt-2-spanish":
+            LIMIT = 2  # We only use this model for testing
+
         TASKS_HARNESS = tasks_todo[model]
         PRECISION = model_precision[model]
         EVAL_REQUEST = EvalRequest(

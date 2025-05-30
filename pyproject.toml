@@ -22,8 +22,8 @@ dependencies = [
     "rich==13.3.4",
     "sentencepiece",
     "tqdm==4.66.3",
-    "optimum",
-    "auto-gptq",
+    "optimum==1.25.3",
+    "auto-gptq==0.7.1",
     "lm-eval @ git+https://github.com/somosnlp/lm-evaluation-harness.git#egg=lm_eval"
 ]
 

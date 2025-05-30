@@ -8,13 +8,13 @@ TOKEN = os.environ.get("HF_TOKEN")  # A read/write token for your org
 OWNER = "la-leaderboard"
 REPO_ID = f"{OWNER}/backend"
 QUEUE_REPO = f"{OWNER}/requests-wip"  # TODO: Remove wip
-RESULTS_REPO = f"{OWNER}/results-wip"  # TODO: Remove wip
+RESULTS_REPO = f"{OWNER}/results-bsc"  # TODO: Remove wip
 LOGS_REPO = f"{OWNER}/logs"
 
 # Evaluation variables
 DEVICE = "cuda:0"
 LIMIT = None  # TODO: Should be None for actual evaluations
-NUM_FEWSHOT = 5  # TODO: Remove to use each task's default number of few-shots
+NUM_FEWSHOT = None  # TODO: Remove to use each task's default number of few-shots
 LEADERBOARD_GROUP = None  # TODO: Update leaderboard group name
 PARALLELIZE = True
 BATCH_SIZE = 1

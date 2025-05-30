@@ -1,5 +1,5 @@
 {
-    "Qwen2.5-32B-Instruct-GPTQ-Int4": [
+    "Qwen/Qwen2.5-32B-Instruct-GPTQ-Int4": [
         "xquad_ca",
         "xquad_es"
     ]

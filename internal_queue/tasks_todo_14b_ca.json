@@ -1,5 +1,5 @@
 {
-    "Qwen2.5-14B-Instruct-GPTQ-Int8": [
+    "Qwen/Qwen2.5-14B-Instruct-GPTQ-Int8": [
         "cabreu",
         "catalanqa"
     ]
