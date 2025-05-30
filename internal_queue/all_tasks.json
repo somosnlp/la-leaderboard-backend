@@ -70,5 +70,6 @@
     "summarization_gl",
     "xnli_gl",
     "xstorycloze_gl"
-]
+],
+"latam": ["americasnlp_mt"]
 }

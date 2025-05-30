@@ -155,6 +155,11 @@ def evaluate_tasks(eval_request, task_names, num_fewshot, batch_size, device, li
                 log_samples=True,
                 verbosity="DEBUG",
             )
+        except Exception as e:
+            logger.error(f"An error occurred during the evaluation of task {task}: {e}")
+            continue
+
+        try:
             results["results"][task] = task_result["results"][task]
             samples["samples"][task] = task_result["samples"][task]
 
@@ -162,7 +167,7 @@ def evaluate_tasks(eval_request, task_names, num_fewshot, batch_size, device, li
             logger.info(f"Samples:\n{json.dumps(task_result['samples'][task], indent=2, ensure_ascii=False)}")
 
         except Exception as e:
-            logger.error(f"An error occurred during evaluation of task {task}: {e}")
+            logger.error(f"An error occurred during the parsing of the results of task {task}: {e}")
             continue
 
     end_time = time.time()
@@ -227,20 +232,21 @@ def evaluate_leaderboard(eval_request, leaderboard_group, task_names, num_fewsho
         logger.info(
             f"Average for group {leaderboard_group}: {json.dumps(task_result['results'][leaderboard_group], indent=2)}"
         )
-        for task in task_names:
-            try:
-                results["results"][task] = task_result["results"][task]
-                samples["samples"][task] = task_result["samples"][task]
-
-                logger.info(f"Results for task {task}:\n{json.dumps(task_result['results'][task], indent=2)}")
-                logger.info(f"Samples:\n{json.dumps(task_result['samples'][task], indent=2, ensure_ascii=False)}")
-
-            except Exception as e:
-                logger.error(f"An error occurred during evaluation of task {task}: {e}")
-                continue
-
     except Exception as e:
         logger.error(f"An error occurred during evaluation of group {leaderboard_group}: {e}")
+        raise
+
+    for task in task_names:
+        try:
+            results["results"][task] = task_result["results"][task]
+            samples["samples"][task] = task_result["samples"][task]
+
+            logger.info(f"Results for task {task}:\n{json.dumps(task_result['results'][task], indent=2)}")
+            logger.info(f"Samples:\n{json.dumps(task_result['samples'][task], indent=2, ensure_ascii=False)}")
+
+        except Exception as e:
+            logger.error(f"An error occurred during the parsing of the results of task {task}: {e}")
+            continue
 
     end_time = time.time()
     elapsed_time = end_time - start_time

@@ -73,16 +73,16 @@ class EvalJob:
 
         if self.model_size_in_b <= 15 * precision_factor:  # DP8, MP2
             accelerate_args += "--num_processes=8 "
-            model_args += ",model_parallel=True "
+            model_args += ",parallelize=True "
         elif self.model_size_in_b <= 33 * precision_factor:  # DB8
             accelerate_args += "--num_processes=8 "
-            model_args += ",model_parallel=False "
+            model_args += ",parallelize=False "
         elif self.model_size_in_b <= 70 * precision_factor:  # DP4, MP2
             accelerate_args += "--num_processes=4 "
-            model_args += ",model_parallel=True "
+            model_args += ",parallelize=True "
         elif self.model_size_in_b <= 140 * precision_factor:  # DP2, MP4
             accelerate_args += "--num_processes=2 "
-            model_args += ",model_parallel=True "
+            model_args += ",parallelize=True "
         else:
             raise Exception(
                 f"Cannot load a model bigger than {140*precision_factor}B on a single node in precision {self.precision}."
