@@ -4,5 +4,7 @@
     "Qwen/Qwen2.5-32B-Instruct": "bfloat16",
     "ibm-granite/granite-3.0-8b-instruct": "float32",
     "microsoft/Phi-3.5-mini-instruct": "bfloat16",
-    "utter-project/EuroLLM-1.7B-Instruct": "bfloat16"
+    "utter-project/EuroLLM-1.7B-Instruct": "bfloat16",
+    "Qwen/Qwen2.5-14B-Instruct-GPTQ-Int8": "float16",
+    "Qwen/Qwen2.5-32B-Instruct-GPTQ-Int4": "float16"
 }
